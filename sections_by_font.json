@@ -1,0 +1,122 @@
+[
+    {
+        "heading": "Image kernels",
+        "content": "The linking bridge between feedforward neural \nnetworks and the Convolutional Neural Networks\nThey are the basic building blocks of filters \nsuch as Instagram filters\nTheir main purpose is to transform images"
+    },
+    {
+        "heading": "Example image transformations",
+        "content": "Achieved using kernels\nOriginal Sharpen\nBlur Edge Detection"
+    },
+    {
+        "heading": "Kernels as matrices",
+        "content": "Kernels work by combining the values of each pixel with its neighbors in\norder to obtain a new, transformed value. Thus, kernels can be conveniently \nexpressed in matrix form, visually expressing the combination of values.\nBlur Sharpen Edge Detection\n0 −1 0\n1 1 1 0 −1 0\n1\n−1 4 −1\n1 1 1 −1 5 −1\n9\n0 −1 0\n1 1 1 0 −1 0"
+    },
+    {
+        "heading": "Convolution",
+        "content": "The kernels are applied to the image through the mathematical operation of convolution.\n(Okay, actually, this is cross-correlation, but convolution is closely related, and the two are \nconflated often enough)\nConvolution equation\n𝑆 𝑖, 𝑗 = 𝐼 ∗ 𝐾 𝑖, 𝑗 = ෍ ෍ 𝐼 𝑚, 𝑛 𝐾(𝑖 − 𝑚, 𝑗 − 𝑛)\n𝑚 𝑛\nthe kernel matrix\nthe original image\nthe result, the transformed image\nIn practice, convolution is the operation of calculating the new value of each pixel in the \nimage, by “sliding” the kernel over it."
+    },
+    {
+        "heading": "Convolution",
+        "content": "Visuals\nConvolution equation"
+    },
+    {
+        "heading": "Edge handling",
+        "content": "There is ambiguity what to do when the kernel “sticks out” of the image, near the edges.\nIn this case, there are a couple of solutions:\nZero padding – expand the image outwards with pixel \nvalues set to zero. This is equivalent to just not using the \npart of the kernel sticking out.\nExtend the image outwards using the values from the \nactual image. This is like placing a mirror at the edges."
+    },
+    {
+        "heading": "Edge handling",
+        "content": "An out-of-the-box solution is to ignore the pixels for which the kernel sticks \nout. Essentially, that would trim the border of the image. This is not a big deal \nwhen dealing with big images, as if we have a 256x256 image, with 5x5 kernel, \nthe result would be 252x252 transformed image."
+    },
+    {
+        "heading": "From convolution to CNN",
+        "content": "A convolutional layer outputs convolutions of its inputs and some kernels\nIn turn, Convolutional Neural Networks (CNNs) are deep networks that \nhave at least one convolutional layer\nIn CNNs, the point of the kernels is to transform an image in a useful way\nHowever, we don’t manually set the kernel matrices. We just let the network \nfind out what kernels would do the job best"
+    },
+    {
+        "heading": "CNN motivation",
+        "content": "Why use CNNs, instead of normal feedforward neural networks?\nCNNs are specialized for structured data. They preserve the spatial structure of \nthe image since they transform a 2D input into a 2D output (the transformed \nimage)\nFeedforward networks, in contrast, first unwrap the 2D input image into a 1D \nvector (row of pixels). This means that the spatial information has been lost"
+    },
+    {
+        "heading": "CNN motivation",
+        "content": "Why use CNNs, instead of normal feedforward neural networks?\nSome pixels that were close to each other in the original image, are now far apart \nOthers that were separated, appear next to each other in the vector"
+    },
+    {
+        "heading": "Feature maps",
+        "content": "In CNNs, the kernels that transform the image are usually most helpful if they are \nconstructed as detectors. For instance, the GDE detection kernel is one such \nexample\nThese kernels are trained to search for specific patterns or features – circles, arcs, \nedges, vertical lines, horizontal lines etc. Thus, the resulting output is not an image, \nbut a feature map\nA feature map shows how much of the corresponding feature is present at a \nlocation in the original image. It is literally a map showing the presence of \nfeatures\nOriginal Feature map\nDetecting trees \nand bushes"
+    },
+    {
+        "heading": "Feature maps",
+        "content": "A single such feature map is not very useful. That’s why a convolutional layer \ncontains many kernels (hyperparameter) that produce many different feature maps"
+    },
+    {
+        "heading": "+",
+        "content": "100 100\nX X\nThus, a convolutional layer consists of N kernels, each with dimensions M x M x D. \nBoth N and M are hyperparameters of our network. However, the depth of the \nkernel D is determined to be the same as the depth of the input. So, for a grayscale \ninput, D would be 1; for a color image D would 3; and for an input consisting of 50 \nfeature maps constructed by a previous conv. Layer, D would be 50"
+    },
+    {
+        "heading": "Pooling",
+        "content": "Besides the convolutional layers, there is a second ingredient in the making of CNNs \n– pooling layers.\nТ\nhe main purpose of pooling layers is to condense the feature maps to a smaller \nsize. Thus, usually pooling layers are situated right after convolutional layers.\nThe most popular pooling is 2 by 2 MaxPooling with stride 2. It partitions the \nfeature map into 2x2 regions, and extracts the maximum from each region.\nSingle depth slice \nx Max pool with 2x2 \nfilters and stride 2 \ny"
+    },
+    {
+        "heading": "Stride",
+        "content": "Stride refers to the amount of pixels the kernel moves.\nFor example, in the previous maxpool example, the stride was 2, as the regions have \nbeen calculated for each 2 pixels."
+    },
+    {
+        "heading": "Example dimension transformation",
+        "content": "Transformed by a single CNN"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "To improve the network’s performance\nWhen considering the performance of our model, there are some techniques we can employ in \norder to prevent overfitting, or simply to increase the accuracy. These are not intended only for \nCNNs, but all kinds of networks. \nPopular ones are:\n2\nL regularization\nWeight decay\nDropout\nData augmentation"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "2\nL regularization\nRegularization, in general, is the technique of adding factors to the loss function, in order to \ncontrol what the network is learning.\nL2 regularization specifically, adds this factor to the loss:\n2"
+    },
+    {
+        "heading": "L = L +  ෍ 𝑤",
+        "content": "L2 regularization equation\n𝑖\n0\nWeights of the network\nHyperparameter to control \nthe scale of the effect"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "2\nL regularization\nThis discourages the model from learning a very complex solution, thus limiting overfitting.\nDue to this factor :\n𝑤 = (1 − 𝜆𝜂)𝑤 − 𝜂∇ 𝐿 (𝑤)\nThe update rule\n𝑛𝑒𝑤 𝑜𝑙𝑑 𝑤 0\nLearning rate"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "Weight decay\nWeight decay is similar to L2 regularization, however it changes the update rule directly, instead \nof doing that indirectly through the loss function\n𝑤 = (1 − 𝜆)𝑤 − 𝜂∇ 𝐿 (𝑤)\nThe update rule\n𝑛𝑒𝑤 𝑜𝑙𝑑 𝑤 0\nWeight Decay\n𝑤 = (1 − 𝜆𝜂)𝑤 − 𝜂∇ 𝐿 (𝑤)\nThe update rule\n𝑛𝑒𝑤 𝑜𝑙𝑑 𝑤 0\n2\nL regularizatin\n2\nThe only difference to the L regularization update rule is the missing learning rate in \nthe brackets\nThus, for optimizers with static learning rate (e.g. SGD), weight decay and L2\nregularization are equivalent\n2\nHowever, for optimizers that use adaptive learning rate, the effects of L regularization \nwould be different in the beginning and end. In contrast, weight decay would have \nconstant effect no matter the optimizer"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "Dropout\nDropout consists of randomly setting a portion of the neurons in a layer to zero. This \ncreates some form of redundancy in the layer and helps with the generalization of \nthe network"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "Dropout\nDropout is present only during training. During testing and operational use of the \nmodel, all neurons are present\nTo work properly, the remaining outputs of the given layer should be scaled up. If the \n1\n𝑝 0 < 𝑝 < 1\nportion of neurons to be dropped is  ( ), then the scaling factor is \n𝑝"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "Data augmentation\nData augmentation is used when the data we have available does not include \nexamples of all classes we would like our model to learn\nFor example, if we want to classify images of cats, ideally our dataset should include \npictures of cats in different poses. In the case our dataset contains only cats facing to \nthe right, we can correct that with data augmentation"
+    },
+    {
+        "heading": "Common techniques",
+        "content": "Data augmentation\nData augmentation itself is the technique of transforming the data to artificially create \nmore examples. This includes mirroring the image, translating, stretching, scaling etc."
+    },
+    {
+        "heading": "Popular CNN architectures",
+        "content": "As a final note, let’s take a look at some of the popular CNN architectures created by the \nprofessionals in this field. \nThe ones we will discuss are:\nAlexNet (2012) – CNN success\nVGG (2014) – more layers\nGoogLeNet (2014)- computational efficiency\nResNet (2015) – revolution of depth"
+    },
+    {
+        "heading": "Popular CNN architectures",
+        "content": "AlexNet\nAlexNet was a relatively straightforward CNN, with 5 convolutional layers, 3 maxpool layers \nand 3 dense layers. It was one of the first easy to produce networks that had success and it \nstarted the spree of CNN research\n5x\nConv\n3x\nMaxPool\n3x\nDense"
+    },
+    {
+        "heading": "Popular CNN architectures",
+        "content": "VGG\nVGG added more layers than AlexNet, which improved the results drastically. The trick VGG \nemployed was to make all convolutional layers with kernels of minimum size – 3x3. This allowed \nfor more layers to be stacked with fewer overall parameters\n3x3\nConv"
+    },
+    {
+        "heading": "Popular CNN architectures",
+        "content": "GoogleNet\nThis architecture was all about computational efficiency. The team at Google designed the so \ncalled Inception module, and the whole network consisted of stacked Inception modules. The \nInception module incorporated parallel layers and a 1x1 conv bottleneck layer to reduce the \nnumber of parameters and operations"
+    },
+    {
+        "heading": "Popular CNN architectures",
+        "content": "ResNet\nThe number of layers in the ResNet architecture skyrocketed from 22 (GoogleNet) to 152! This \nwas achieved thanks to the residual blocks. These consisted of 2 convolutional layers in which the \ninput was summed with the output. Thus, the network needs to learn only how to change the \ninput, not the output itself."
+    }
+]
