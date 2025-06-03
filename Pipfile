@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+pydantic = "*"
+python-multipart = "*"
+sentence-transformers = "*"
+langchain = "*"
+langchain-ollama = "*"
+chromadb = "*"
+pdfplumber = "*"
+regex = "*"
+langchain-core = "*"
+langchain-text-splitters = "*"
+httpx = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
